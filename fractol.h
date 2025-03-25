@@ -39,9 +39,9 @@
 #define COLOR_DARKGREEN 0x006400
 #define COLOR_DARKORCHID 0x9932CC
 
-#define QUALITY 1
+#define QUALITY 100
 #define WIDTH 800
-#define HEIGHT 600
+#define HEIGHT 800
 #define TITLE "Fractol dcid-san"
 #define JULIA 0
 #define MANDELBROT 1
