@@ -1,0 +1,13 @@
+{
+	"files.associations": {
+		"stdlib.h": "c",
+		"stdio.h": "c",
+		"array": "c",
+		"string_view": "c",
+		"format": "c",
+		"initializer_list": "c",
+		"span": "c",
+		"sstream": "c",
+		"libft.h": "c"
+	}
+}
