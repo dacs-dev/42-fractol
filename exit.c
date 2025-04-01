@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcid-san <dcid-san@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:28:34 by dcid-san          #+#    #+#             */
+/*   Updated: 2025/03/26 03:28:58 by dcid-san         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 #include "libft/ft_printf/ft_printf.h"
 
-void free_data(t_f_data *data)
+void	free_data(t_f_data *data)
 {
 	if (data)
 	{
@@ -19,10 +31,12 @@ void free_data(t_f_data *data)
 			mlx_destroy_display(data->mlx_ptr);
 			free(data->mlx_ptr);
 		}
-		// free(data);
+		free(data);
 	}
 }
-void exit_with_error(char *msg, int code, t_f_data *data, void (*callback)(t_f_data *))
+
+void	exit_with_error(char *msg, int code, t_f_data *data,
+	void (*callback)(t_f_data *))
 {
 	if (callback)
 		callback(data);
@@ -30,7 +44,8 @@ void exit_with_error(char *msg, int code, t_f_data *data, void (*callback)(t_f_d
 	exit(code);
 }
 
-void exit_with_msg(char *msg, int code, t_f_data *data, void (*callback)(t_f_data *))
+void	exit_with_msg(char *msg, int code, t_f_data *data,
+	void (*callback)(t_f_data *))
 {
 	if (callback)
 		callback(data);
