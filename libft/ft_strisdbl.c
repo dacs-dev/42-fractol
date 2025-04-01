@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsort_int.c                                   :+:      :+:    :+:   */
+/*   ft_strisnum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcid-san <dcid-san@student.42madrid.com>   #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-01 01:37:59 by dcid-san          #+#    #+#             */
-/*   Updated: 2025-04-01 01:37:59 by dcid-san         ###   ########.fr       */
+/*   Created: 2025-04-01 15:53:22 by dcid-san          #+#    #+#             */
+/*   Updated: 2025-04-01 15:53:22 by dcid-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstsort_int(int *lst, int size)
+int	ft_strisdbl(char *str)
 {
-	int	wrapper;
-	int	i;
+	int	dot;
 
-	i = 0;
-	while (i < (size - 1))
+	if (!str)
+		return (0);
+	if (*str == '-' || *str == '+')
+		str++;
+	dot = 0;
+	while (*str)
 	{
-		if (lst[i] > lst[i + 1])
-		{
-			wrapper = lst[i];
-			lst[i] = lst[i + 1];
-			lst[i + 1] = wrapper;
-			i = 0;
-		}
-		else
-			i++;
+		if ((!ft_isdigit(*str) && *str != '.')
+			|| (*str == '.' && dot == 1))
+			return (0);
+		if (*str == '.')
+			dot = 1;
+		str++;
 	}
+	return (1);
 }
+

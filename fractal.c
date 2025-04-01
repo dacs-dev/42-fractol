@@ -11,57 +11,27 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include <math.h>
 
-static inline void set_pixel_color(int x, int y, int color, t_img *img)
+void	set_pixel_color(int x, int y, int color, t_img *img)
 {
-    int offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
-    *(unsigned int *)(img->addr + offset) = color;
+	int	offset;
+
+	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
+	*(unsigned int *)(img->addr + offset) = color;
 }
 
-
-
-void compute_mandelbrot(int x, int y, t_f_data *data)
+void	compute_mandelbrot(t_coord c, t_f_data *data)
 {
-    t_coord z;
-    t_coord c;
-    int i;
-    double temp;
+	t_coord	z;
+	t_coord	c;
+	int		i;
+	double	temp;
 
-    /* Transformación de coordenadas */
-    c.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
-    c.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-    z.real = 0;
-    z.imaginary = 0;
-    i = 0;
-    while (i < data->quality)
-    {
-        temp = z.real * z.real - z.imaginary * z.imaginary + c.real;
-        z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
-        z.real = temp;
-        if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-            break;
-        i++;
-    }
-    if (i == data->quality)
-        set_pixel_color(x, y, COLOR_MAGENTA, data->img);
-    else {
-        set_pixel_color(x, y, scale_range(i, COLOR_BLACK, COLOR_WHITE, 0, data->quality), data->img);
-    }
-}
-
-/* Cálculo del Julia */
-void compute_julia(int x, int y, t_f_data *data)
-{
-	t_coord z;
-	t_coord c;
-	int i;
-	double temp;
-
-	z.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
-	z.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-	c.real = data->julia_c_real;
-	c.imaginary = data->julia_c_imag;
-		
+	c.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
+	c.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
+	z.real = 0;
+	z.imaginary = 0;
 	i = 0;
 	while (i < data->quality)
 	{
@@ -69,63 +39,80 @@ void compute_julia(int x, int y, t_f_data *data)
 		z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
 		z.real = temp;
 		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-			break;
+			break ;
 		i++;
 	}
 	if (i == data->quality)
 		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
-	else {
+	else
+		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
+}
 
-		set_pixel_color(x, y, scale_range(i, COLOR_BLACK, COLOR_WHITE, 0, data->quality), data->img);
+/* Cálculo del Julia */
+void	compute_julia(t_coord z, t_f_data *data)
+{
+	t_coord	z;
+	t_coord	c;
+	int		i;
+	double	temp;
+
+	z.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
+	z.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
+	c.real = data->julia_c_real;
+	c.imaginary = data->julia_c_imag;
+	i = 0;
+	while (i < data->quality)
+	{
+		temp = z.real * z.real - z.imaginary * z.imaginary + c.real;
+		z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
+		z.real = temp;
+		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
+			break ;
+		i++;
 	}
+	if (i == data->quality)
+		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
+	else
+		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
+}
+
+void	compute_burningship(t_coord c, t_f_data *data)
+{
+	t_coord	z;
+	int		i;
+
+	z.real = 0;
+	z.imaginary = 0;
+	i = 0;
+	while (i < data->quality)
+	{
+		double
+		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
+			break ;
+		i++;
+	}
+	if (i == data->quality)
+		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
+	else
+		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
 }
 
 
 
-/* Cálculo del Burning Ship */
-void compute_burningship(int x, int y, t_f_data *data)
+void	print_fractal(t_f_data *data)
 {
-    t_coord z;
-    t_coord c;
-    int i;
-    double temp;
+	int	x;
+	int	y;
+	t_coord scaled;
 
-    c.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
-    c.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-    z.real = 0;
-    z.imaginary = 0;
-    
-    i = 0;
-    while (i < data->quality)
-    {
-        temp = z.real * z.real - z.imaginary * z.imaginary + c.real;
-        z.imaginary = fabs(2 * z.real * z.imaginary) + c.imaginary;
-        z.real = fabs(temp);
-        if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-            break;
-        i++;
-    }
-    if (i == data->quality)
-        set_pixel_color(x, y, 0x000000, data->img);
-    else {
-
-        set_pixel_color(x, y, scale_range(i, COLOR_BLACK, COLOR_WHITE, 0, data->quality), data->img);
-    }
-}
-
-
-/* Renderiza el fractal sin paralelización externa */
-void print_fractal(t_f_data *data)
-{
-	int x, y;
-
-	/* Se recorren los píxeles de la imagen */
 	x = 0;
 	while (x < WIDTH)
 	{
+		scaled.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
 		y = 0;
 		while (y < HEIGHT)
 		{
+			scaled.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
 			if (data->num == MANDELBROT)
 				compute_mandelbrot(x, y, data);
 			else if (data->num == JULIA)

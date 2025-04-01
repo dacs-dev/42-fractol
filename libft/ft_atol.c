@@ -10,14 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-long ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
-	long num;
-	int  is_neg;
+	long	num;
+	int		is_neg;
 
 	is_neg = 1;
 	num = 0;
-	while (*str == ' ' || *str == '\f' || *str == '\t' || *str == '\n' || *str == '\r' || *str == '\v')
+	while (*str == ' ' || *str == '\f' || *str == '\t'
+		|| *str == '\n' || *str == '\r' || *str == '\v')
 		str++;
 	if (*str == '-' || *str == '+')
 	{

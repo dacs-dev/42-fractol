@@ -17,7 +17,6 @@
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char		*substr;
-
 	size_t		slen;
 	size_t		size;
 
@@ -37,8 +36,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(substr, s + start, size + 1);
 	return (substr);
 }
-
-/* int main(void)
-{
-	printf("%s", ft_substr("hola", 4294967295, 18446744073709551615) == NULL ? "NULL": ft_substr("hola", 4294967295, 18446744073709551615));
-} */

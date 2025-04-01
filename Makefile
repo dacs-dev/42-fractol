@@ -44,7 +44,6 @@ clean:
 # Regla para borrar el ejecutable y archivos objeto
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) fclean -C $(MLX_DIR)
 	$(MAKE) fclean -C $(LIBFT_DIR)
 
 # Regla para recompilar desde cero

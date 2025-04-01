@@ -12,37 +12,31 @@
 
 #include "libft.h"
 
-double ft_atodbl(const char *str)
+double	ft_atodbl(const char *str)
 {
-	long   int_part;
-	double decimal_part;
-	int    is_neg;
+	double			nb;
+	double			part;
+	double			sign;
 
-	is_neg = 1;
-	int_part = 0;
-	while (*str == ' ' || *str == '\f' || *str == '\t' || *str == '\n' || *str == '\r' || *str == '\v')
+	while (*str == ' ' || *str == '\f' || *str == '\t'
+		|| *str == '\n' || *str == '\r' || *str == '\v')
 		str++;
+	if (*str == '-')
+		sign = -1.0 ;
+	else
+		sign = 1.0;
 	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			is_neg *= -1;
 		str++;
-	}
+	nb = 0.0;
 	while (*str >= '0' && *str <= '9')
+		nb = nb * 10 + (*(str++) - '0');
+	if (*str == '.' || *str == ',')
 	{
-		int_part += (*str - 48);
-		if (str[1] != '\0' && str[1] >= '0' && str[1] <= '9')
-			int_part *= 10;
-		str++;
+		while (*(++str) >= '0' && *str <= '9')
+			part = 0.0;
+		while (*(--str) >= '0' && *str <= '9')
+			part = (part + (*str - '0')) / 10.0;
+		nb += part;
 	}
-	if (*str == '.')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		int_part += (*str - 48);
-		if (str[1] != '\0' && str[1] >= '0' && str[1] <= '9')
-			int_part *= 10;
-		str++;
-	}
-	return (int_part * is_neg);
+	return (nb * sign);
 }

@@ -12,25 +12,34 @@
 
 #include "fractol.h"
 
+int	close_handler(t_f_data *data)
+{
+	exit_with_msg("Se presiona el botón X cerramos...\n", 0, data, free_data);
+	return (0);
+}
+
 void	parse_args(int argc, char **argv, t_f_data *data)
 {
-	char *f_name;
+	char	*f_name;
 
 	f_name = ft_strlower(argv[1]);
 	if (argc == 2 && ft_strncmp(f_name, MANDELBROT_STR, 10) == 0)
-	{
 		data->num = MANDELBROT;
-		data->name = MANDELBROT_STR;
-	}
 	else if (argc == 4 && ft_strncmp(f_name, JULIA_STR, 10) == 0)
 	{
 		data->num = JULIA;
-		data->name = JULIA_STR;
+		if (!ft_strisdbl(argv[2]) || !ft_strisdbl(argv[3]))
+			exit_with_error("Bad arg", 1, data, NULL);
+		data->julia_c_real = ft_atodbl(argv[2]);
+		data->julia_c_imag = ft_atodbl(argv[3]);
+		return ;
 	}
+	else if (argc == 2 && ft_strncmp(f_name, BURNING_SHIP_STR, 10) == 0)
+		data->num = BURNING_SHIP;
 	else
-	{
 		exit_with_error("Nombre erroneo de fractal", 1, data, NULL);
-	}
+	data->julia_c_real = -0.7;
+	data->julia_c_imag = 0.27015;
 }
 
 void	init_data(t_f_data *data)
@@ -39,8 +48,6 @@ void	init_data(t_f_data *data)
 	data->added_x = 0;
 	data->added_y = 0;
 	data->quality = QUALITY;
-	data->julia_c_real = -0.7;
-	data->julia_c_imag = 0.27015;
 	data->scale_x = 4.0 / WIDTH;
 	data->scale_y = 4.0 / HEIGHT;
 	data->zoom = 1.0;
@@ -50,11 +57,9 @@ void	init_data(t_f_data *data)
 	data->window_ptr = mlx_new_window(data->mlx_ptr, WIDTH, HEIGHT, TITLE);
 	if (data->window_ptr == NULL)
 		exit_with_error("window_ptr fail\n", 1, data, free_data);
-
 	data->img = malloc(sizeof(t_img));
 	if (data->img == NULL)
 		exit_with_error("Malloc for img fail\n", 1, data, free_data);
-
 	data->img->img = mlx_new_image(data->mlx_ptr, WIDTH, HEIGHT);
 	if (data->img->img == NULL)
 		exit_with_error("Image creation fail\n", 1, data, free_data);

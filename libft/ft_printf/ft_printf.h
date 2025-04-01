@@ -17,8 +17,6 @@
 int	ft_printf(char const *str, ...);
 int	ft_putptr_fd(void *ptr, int fd);
 int	ft_put_int_fd(int n, int fd);
-int	ft_putfloat_fd(float n, int fd);
-int	ft_put_double_fd(double n, int fd, int size);
 int	ft_print_str(char *str);
 int	ft_put_unsigned_fd(unsigned int n, int fd);
 int	ft_put_hexa(unsigned int nb, char c);

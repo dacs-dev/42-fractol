@@ -12,14 +12,17 @@
 
 #include "libft.h"
 
-char *ft_strlower(char *str)
+char	*ft_strlower(char *str)
 {
-	char *wrap;
+	char	*wrap;
 
 	if (NULL == str)
 		return (NULL);
 	wrap = str;
 	while (*wrap)
-		(*wrap = ft_tolower(*wrap), wrap++);
+	{
+		*wrap = ft_tolower(*wrap);
+		wrap++;
+	}
 	return (str);
 }

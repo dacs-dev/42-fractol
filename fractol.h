@@ -22,9 +22,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define WIDTH 600
-# define HEIGHT 600
-# define QUALITY 2000
+# define WIDTH 800
+# define HEIGHT 800
+# define QUALITY 40
 # define TITLE "Fractol by dcid-san"
 # define COLOR_BLACK 0x000000 
 # define COLOR_WHITE 0xFFFFFF
@@ -76,20 +76,17 @@ typedef struct s_f_data
 
 }	t_f_data;
 
+void	init_data(t_f_data *data);
+void	print_fractal(t_f_data *data);
+int		keyboard_handler(int keysym, t_f_data *data);
+int		keyboard_handler(int keysym, t_f_data *data);
+int		mouse_handler(int button, int x, int y, t_f_data *data);
+int		close_handler(t_f_data *data);
+void	exit_with_error(char *msg, int code,
+			t_f_data *data, void (*callback)(t_f_data *));
+void	exit_with_msg(char *msg, int code,
+			t_f_data *data, void (*callback)(t_f_data *));
+void	free_data(t_f_data *data);
+double	scale_color(double unscaled, double curr_max);
 
-void init_data(t_f_data *data);
-void print_fractal(t_f_data *data);
-int	keyboard_handler(int keysym, t_f_data *data);
-void pixel_put(t_img *img, int x, int y, int color);
-t_coord square_coord(t_coord current);
-t_coord sum_coord(t_coord coord1, t_coord coord2);
-int			keyboard_handler(int keysym, t_f_data *data);
-int			mouse_handler(int button, int x, int y, t_f_data *data);
-int			close_handler(t_f_data *data);
-void exit_with_error(char *msg, int code, t_f_data *data, void (*callback)(t_f_data *));
-void exit_with_msg(char *msg, int code, t_f_data *data, void (*callback)(t_f_data *));
-void free_data(t_f_data *data);
-int get_color(int i, int quality);
-double scale_range(double unscaled, double min_val, 
-	double max_val, double curr_min, double curr_max);
 #endif

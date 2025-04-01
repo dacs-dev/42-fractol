@@ -12,7 +12,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
-#include "libft/libft.h"
+#include "../libft.h"
 
 int	ft_put_int_fd(int n, int fd)
 {

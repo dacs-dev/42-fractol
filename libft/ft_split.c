@@ -76,19 +76,3 @@ char	**ft_split(char const *s, char c)
 	}
 	return (list);
 }
-
-
-/* int main(void)
-{
-	//char str[] = ",,,,hello,42,madrid";
-	
-	char **list = ft_split("lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultricies diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.", 'i');
-	int i = 0;
-    while (list[i] != NULL) {
-        printf("String:%s\nlength: %lu\n", list[i], ft_strlen(list[i])); 
-		free(list[i]);
-        i++; 
-    }
-	free(list);
-	return (0);
-} */
