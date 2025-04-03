@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcid-san <dcid-san@student.42madrid.com>   #+#  +:+       +#+        */
+/*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-01 00:52:39 by dcid-san          #+#    #+#             */
-/*   Updated: 2025-04-01 00:52:39 by dcid-san         ###   ########.fr       */
+/*   Created: 2025/04/01 00:52:39 by dcid-san          #+#    #+#             */
+/*   Updated: 2025/04/02 16:09:59 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ int	keyboard_handler(int keysym, t_f_data *data)
 	handle_arrows(keysym, data);
 	handle_quality(keysym, data);
 	handle_nums(keysym, data);
+	if (keysym == XK_q)
+		data->fill_color += 0x300000;
+	else if (keysym == XK_a)
+		data->fill_color -= 0x300000;
 	print_fractal(data);
 	return (0);
 }

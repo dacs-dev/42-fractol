@@ -1,124 +1,95 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fractal.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 17:45:46 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/03/29 23:56:00 by krusty           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "fractol.h"
 #include <math.h>
 
-void	set_pixel_color(int x, int y, int color, t_img *img)
+// Transforma las coordenadas de píxel a las coordenadas del plano complejo.
+// Función de iteración para Mandelbrot (se utiliza también para Julia).
+t_coord	mandelbrot_iterate(t_coord z, t_coord c)
 {
-	int	offset;
+	t_coord result;
 
-	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
-	*(unsigned int *)(img->addr + offset) = color;
+	result.real = z.real * z.real - z.imaginary * z.imaginary + c.real;
+	result.imaginary = 2 * z.real * z.imaginary + c.imaginary;
+	return (result);
 }
 
-void	compute_mandelbrot(t_coord c, t_f_data *data)
+// Función de iteración para Burning Ship.
+// Se aplican los valores absolutos a las partes real
+// e imaginaria antes de cada iteración.
+t_coord	burningship_iterate(t_coord z, t_coord c)
 {
-	t_coord	z;
+	t_coord	result;
+	double	abs_real;
+	double	abs_imag;
+
+	abs_real = fabs(z.real);
+	abs_imag = fabs(z.imaginary);
+	result.real = abs_real * abs_real - abs_imag * abs_imag + c.real;
+	result.imaginary = 2 * abs_real * abs_imag + c.imaginary;
+	return (result);
+}
+
+// Función genérica que computa la cantidad de iteraciones para un punto dado.
+// La función 'iterate' se encarga de aplicar la fórmula propia del fractal.
+int	compute_iterations(t_coord z, t_coord c, t_f_data *data,
+						t_coord (*iterate)(t_coord, t_coord))
+{
+	int	i;
+
+	i= 0;
+	while (i < data->quality)
+	{
+		z = iterate(z, c);
+		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+// Función principal que recorre cada píxel y dibuja el fractal seleccionado.
+//t_coord c; Parámetro constante para fractales (por ejemplo, para Julia)
+int	calculate_fractal(int x, int y, t_f_data *data)
+{
+	t_coord	coord;
 	t_coord	c;
-	int		i;
-	double	temp;
 
-	c.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
-	c.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-	z.real = 0;
-	z.imaginary = 0;
-	i = 0;
-	while (i < data->quality)
+	coord = transform_coord(x, y, data);
+	if (data->num == MANDELBROT)
+		return (compute_iterations((t_coord){0, 0}
+			, coord, data, mandelbrot_iterate));
+	else if (data->num == JULIA)
 	{
-		temp = z.real * z.real - z.imaginary * z.imaginary + c.real;
-		z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
-		z.real = temp;
-		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-			break ;
-		i++;
+		c.real = data->julia_c_real;
+		c.imaginary = data->julia_c_imag;
+		return (compute_iterations(coord, c
+				, data, mandelbrot_iterate));
 	}
-	if (i == data->quality)
-		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
-	else
-		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
+	else if (data->num == BURNING_SHIP)
+		return (compute_iterations((t_coord){0, 0}, coord
+			, data, burningship_iterate));
+
+	return (0);
 }
-
-/* Cálculo del Julia */
-void	compute_julia(t_coord z, t_f_data *data)
-{
-	t_coord	z;
-	t_coord	c;
-	int		i;
-	double	temp;
-
-	z.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
-	z.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-	c.real = data->julia_c_real;
-	c.imaginary = data->julia_c_imag;
-	i = 0;
-	while (i < data->quality)
-	{
-		temp = z.real * z.real - z.imaginary * z.imaginary + c.real;
-		z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
-		z.real = temp;
-		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-			break ;
-		i++;
-	}
-	if (i == data->quality)
-		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
-	else
-		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
-}
-
-void	compute_burningship(t_coord c, t_f_data *data)
-{
-	t_coord	z;
-	int		i;
-
-	z.real = 0;
-	z.imaginary = 0;
-	i = 0;
-	while (i < data->quality)
-	{
-		double
-		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-			break ;
-		i++;
-	}
-	if (i == data->quality)
-		set_pixel_color(x, y, COLOR_MAGENTA, data->img);
-	else
-		set_pixel_color(x, y, scale_color(i, data->quality), data->img);
-}
-
-
 
 void	print_fractal(t_f_data *data)
 {
-	int	x;
-	int	y;
-	t_coord scaled;
+	int		x;
+	int		y;
+	int		iterations;
 
-	x = 0;
+	x= 0;
 	while (x < WIDTH)
 	{
-		scaled.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
 		y = 0;
 		while (y < HEIGHT)
 		{
-			scaled.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
-			if (data->num == MANDELBROT)
-				compute_mandelbrot(x, y, data);
-			else if (data->num == JULIA)
-				compute_julia(x, y, data);
-			else if (data->num == BURNING_SHIP)
-				compute_burningship(x, y, data);
+			iterations = calculate_fractal(x, y, data);
+			if (iterations == data->quality)
+				set_pixel_color(x, y, data->fill_color, data->img);
+			else
+				set_pixel_color(x, y, scale_color(iterations,
+						data->quality), data->img);
 			y++;
 		}
 		x++;

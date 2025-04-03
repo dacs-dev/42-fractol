@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:31:16 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/03/30 00:02:43 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/02 16:55:56 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define COLOR_BLACK 0x000000 
 # define COLOR_WHITE 0xFFFFFF
 # define COLOR_MAGENTA 0xFF00FF
+# define PALLETES 10
 # define PI 3.14159265358979323846
 
 # define JULIA 0
@@ -69,6 +70,8 @@ typedef struct s_f_data
 	double	added_y;
 	double	quality;
 	double	zoom;
+	int		color_pallete;
+	int		fill_color;
 	double	scale_x;
 	double	scale_y;
 	double	julia_c_real;
@@ -87,6 +90,8 @@ void	exit_with_error(char *msg, int code,
 void	exit_with_msg(char *msg, int code,
 			t_f_data *data, void (*callback)(t_f_data *));
 void	free_data(t_f_data *data);
-double	scale_color(double unscaled, double curr_max);
+int		scale_color(int iterations, int max_iterations);
+t_coord	transform_coord(int x, int y, t_f_data *data);
+void	set_pixel_color(int x, int y, int color, t_img *img);
 
 #endif
