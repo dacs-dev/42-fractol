@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractal.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcid-san <dcid-san@student.42madrid.com>   #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-04-03 16:38:29 by dcid-san          #+#    #+#             */
+/*   Updated: 2025-04-03 16:38:29 by dcid-san         ###   ########z;        */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "fractol.h"
 #include <math.h>
@@ -6,7 +17,7 @@
 // Función de iteración para Mandelbrot (se utiliza también para Julia).
 t_coord	mandelbrot_iterate(t_coord z, t_coord c)
 {
-	t_coord result;
+	t_coord	result;
 
 	result.real = z.real * z.real - z.imaginary * z.imaginary + c.real;
 	result.imaginary = 2 * z.real * z.imaginary + c.imaginary;
@@ -36,7 +47,7 @@ int	compute_iterations(t_coord z, t_coord c, t_f_data *data,
 {
 	int	i;
 
-	i= 0;
+	i = 0;
 	while (i < data->quality)
 	{
 		z = iterate(z, c);
@@ -68,7 +79,6 @@ int	calculate_fractal(int x, int y, t_f_data *data)
 	else if (data->num == BURNING_SHIP)
 		return (compute_iterations((t_coord){0, 0}, coord
 			, data, burningship_iterate));
-
 	return (0);
 }
 
@@ -78,7 +88,7 @@ void	print_fractal(t_f_data *data)
 	int		y;
 	int		iterations;
 
-	x= 0;
+	x = 0;
 	while (x < WIDTH)
 	{
 		y = 0;

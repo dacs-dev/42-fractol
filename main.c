@@ -25,19 +25,22 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 	f_name = ft_strlower(argv[1]);
 	if (argc == 2 && ft_strncmp(f_name, MANDELBROT_STR, 10) == 0)
 		data->num = MANDELBROT;
-	else if (argc == 4 && ft_strncmp(f_name, JULIA_STR, 10) == 0)
+	else if (argc == 2 && ft_strncmp(f_name, JULIA_STR, 10) == 0)
 	{
 		data->num = JULIA;
-		if (!ft_strisdbl(argv[2]) || !ft_strisdbl(argv[3]))
-			exit_with_error("Bad arg", 1, data, NULL);
-		data->julia_c_real = ft_atodbl(argv[2]);
-		data->julia_c_imag = ft_atodbl(argv[3]);
-		return ;
+		if (argc == 4 && ft_strisdbl(argv[2]) && ft_strisdbl(argv[3]))
+		{
+			data->julia_c_real = ft_atodbl(argv[2]);
+			data->julia_c_imag = ft_atodbl(argv[3]);
+			return ;
+		}
+		else
+			exit_with_msg(HELP_MSG, 0, data, free_data);
 	}
 	else if (argc == 2 && ft_strncmp(f_name, BURNING_SHIP_STR, 10) == 0)
 		data->num = BURNING_SHIP;
 	else
-		exit_with_error("Nombre erroneo de fractal", 1, data, NULL);
+		exit_with_msg(HELP_MSG, 0, data, free_data);
 	data->julia_c_real = -0.7;
 	data->julia_c_imag = 0.27015;
 }

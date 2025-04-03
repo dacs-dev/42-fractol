@@ -29,7 +29,9 @@
 # define COLOR_BLACK 0x000000 
 # define COLOR_WHITE 0xFFFFFF
 # define COLOR_MAGENTA 0xFF00FF
-# define PALLETES 10
+# define HELP_MSG "Uso:\n\t./fractol mandelbrot \
+\n\t./fractol julia [c_real c_imaginary]\
+\n\t ./fractol burning_ship\n\t"
 # define PI 3.14159265358979323846
 
 # define JULIA 0
@@ -90,7 +92,7 @@ void	exit_with_error(char *msg, int code,
 void	exit_with_msg(char *msg, int code,
 			t_f_data *data, void (*callback)(t_f_data *));
 void	free_data(t_f_data *data);
-int		scale_color(int iterations, int max_iterations);
+int		scale_color(int unscaled, int curr_max);
 t_coord	transform_coord(int x, int y, t_f_data *data);
 void	set_pixel_color(int x, int y, int color, t_img *img);
 

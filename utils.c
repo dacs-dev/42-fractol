@@ -25,6 +25,7 @@ int	scale_color(int unscaled, int curr_max)
 t_coord	transform_coord(int x, int y, t_f_data *data)
 {
 	t_coord	coord;
+
 	coord.real = ((x * data->scale_x) - 2.0) / data->zoom + data->added_x;
 	coord.imaginary = ((y * data->scale_y) - 2.0) / data->zoom + data->added_y;
 	return (coord);

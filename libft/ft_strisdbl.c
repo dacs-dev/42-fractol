@@ -32,4 +32,3 @@ int	ft_strisdbl(char *str)
 	}
 	return (1);
 }
-

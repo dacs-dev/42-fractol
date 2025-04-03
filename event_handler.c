@@ -43,6 +43,8 @@ void	handle_nums(int keysym, t_f_data *data)
 		data->num = JULIA;
 	else if (keysym == XK_3)
 		data->num = BURNING_SHIP;
+	else if (keysym == XK_5)
+		data->num = BURNING_SHIP;
 	else if (keysym == XK_0)
 	{
 		data->added_x = 0;
@@ -61,10 +63,20 @@ int	keyboard_handler(int keysym, t_f_data *data)
 	handle_arrows(keysym, data);
 	handle_quality(keysym, data);
 	handle_nums(keysym, data);
-	if (keysym == XK_q)
-		data->fill_color += 0x300000;
-	else if (keysym == XK_a)
-		data->fill_color -= 0x300000;
+	if (keysym == XK_a)
+	{
+		if (data->fill_color <= 16777215 - 65793)
+			data->fill_color += 65793;
+		else
+			data->fill_color = COLOR_WHITE;
+	}
+	else if (keysym == XK_q)
+	{
+		if (data->fill_color >= 65793)
+			data->fill_color -= 65793;
+		else
+			data->fill_color = COLOR_BLACK;
+	}
 	print_fractal(data);
 	return (0);
 }
