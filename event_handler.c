@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 00:52:39 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/04 05:52:42 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 18:05:39 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	handle_quality(int keysym, t_f_data *data)
 
 void	handle_nums(int keysym, t_f_data *data)
 {
+	
 	if (keysym == XK_1)
 		data->num = MANDELBROT;
 	else if (keysym == XK_2)
@@ -65,15 +66,12 @@ int	keyboard_handler(int keysym, t_f_data *data)
 	handle_nums(keysym, data);
 	if (keysym == XK_7)
 	{
-		// Asigna un nuevo color (por ejemplo, naranja)
 		data->fill_color = 0xFFA500;
 	}
 	else if (keysym == XK_8)
 	{
-		// Asigna otro color (por ejemplo, cian)
 		data->fill_color = 0x00FFFF;
 	}
-
 	print_fractal(data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:38:29 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/04 05:50:48 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 18:11:55 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ t_coord	burningship_iterate(t_coord z, t_coord c)
 double	compute_iterations(t_coord variable, t_coord constant, t_f_data *data,
 						t_coord (*iterate)(t_coord, t_coord))
 {
-	int	i;
-	t_coord zn;
-	double smooth_iter;
-	double mod;
+	int		i;
+	t_coord	zn;
+	double	smooth_iter;
+	double	mod;
 
 	zn = variable;
 	i = 0;
@@ -70,21 +70,16 @@ double	compute_iterations(t_coord variable, t_coord constant, t_f_data *data,
 
 // Función principal que recorre cada píxel y dibuja el fractal seleccionado.
 //t_coord c; Parámetro constante para fractales (por ejemplo, para Julia)
-double	calculate_fractal(int x, int y, t_f_data *data)
+double	calculate_fractal(t_coord	coord, t_f_data *data )
 {
-	t_coord	coord;
-	t_coord	c;
-
-	coord = transform_coord(x, y, data);
 	if (data->num == MANDELBROT)
 		return (compute_iterations((t_coord){0, 0}
 			, coord, data, mandelbrot_iterate));
 	else if (data->num == JULIA)
 	{
-		c.real = data->julia_c_real;
-		c.imaginary = data->julia_c_imag;
-		return (compute_iterations(coord, c
-				, data, mandelbrot_iterate));
+		return (compute_iterations(coord,
+				(t_coord){data->julia_c_real, data->julia_c_imag},
+			data, mandelbrot_iterate));
 	}
 	else if (data->num == BURNING_SHIP)
 		return (compute_iterations((t_coord){0, 0}, coord
@@ -96,17 +91,25 @@ void	print_fractal(t_f_data *data)
 {
 	int		x;
 	int		y;
-	double		iterations;
+	double	iterations;
+	t_coord	scaled;
 
 	y = 0;
 	while (y < HEIGHT)
 	{
+		scaled.imaginary = scale_num(y,
+				data->zoom, data->scale_y, data->added_y);
 		x = 0;
 		while (x < WIDTH)
 		{
-			iterations = calculate_fractal(x, y, data);
+			scaled.real = scale_num(x,
+					data->zoom, data->scale_x, data->added_x);
+			iterations = calculate_fractal(scaled, data);
+			/* set_pixel_color(x, y,
+				smooth_color(iterations, data->quality, data),
+				data->img); */
 			set_pixel_color(x, y,
-				smooth_color(iterations, data->quality, data->fill_color),
+				scale_color_fill(iterations, data->quality, data->fill_color),
 				data->img);
 			x++;
 		}

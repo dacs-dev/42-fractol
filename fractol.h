@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:31:16 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/04 05:49:44 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 18:00:52 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define WIDTH 800
-# define HEIGHT 800
-# define QUALITY 40
+# define WIDTH 600
+# define HEIGHT 600
+# define QUALITY 42
 # define TITLE "Fractol by dcid-san"
 # define COLOR_BLACK 0x000000 
 # define COLOR_WHITE 0xFFFFFF
@@ -64,7 +64,6 @@ typedef struct s_f_data
 {
 	void	*mlx_ptr;
 	void	*window_ptr;
-	char	*name;
 	int		num;
 	t_img	*img;
 	int		pallete[8];
@@ -72,7 +71,8 @@ typedef struct s_f_data
 	double	added_y;
 	double	quality;
 	double	zoom;
-	int		color_pallete;
+	int		is_printed;
+	int		pallete_size;
 	int		fill_color;
 	double	scale_x;
 	double	scale_y;
@@ -93,10 +93,9 @@ void	exit_with_msg(char *msg, int code,
 			t_f_data *data, void (*callback)(t_f_data *));
 void	free_data(t_f_data *data);
 void	init_pallete(t_f_data *data);
-
 int	scale_color_fill(double iterations, double quality, int fill_color);
-int smooth_color(double smooth_iter, double max_iter, int fill_color);
-t_coord	transform_coord(int x, int y, t_f_data *data);
+int smooth_color(double smooth_iter, double max_iter, t_f_data *data);
+double	scale_num(int num, double zoom, double scale, double added);
 void	set_pixel_color(int x, int y, int color, t_img *img);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:10:29 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/04 05:39:08 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 17:52:30 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,17 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 {
 	char	*f_name;
 
+	printf("Is double1: %d Is double2: %d\n", ft_strisdbl(argv[2]), ft_strisdbl(argv[3]));
 	f_name = ft_strlower(argv[1]);
 	if (argc == 2 && ft_strncmp(f_name, MANDELBROT_STR, 10) == 0)
 		data->num = MANDELBROT;
-	else if (argc == 2 && ft_strncmp(f_name, JULIA_STR, 10) == 0)
+	else if (argc == 4 && ft_strncmp(f_name, JULIA_STR, 6) == 0
+		&& ft_strisdbl(argv[2]) && ft_strisdbl(argv[3]))
 	{
 		data->num = JULIA;
-		if (argc == 4 && ft_strisdbl(argv[2]) && ft_strisdbl(argv[3]))
-		{
-			data->julia_c_real = ft_atodbl(argv[2]);
-			data->julia_c_imag = ft_atodbl(argv[3]);
-			return ;
-		}
-		else
-			exit_with_msg(HELP_MSG, 0, data, free_data);
+		data->julia_c_real = ft_atodbl(argv[2]);
+		data->julia_c_imag = ft_atodbl(argv[3]);
+		return ;
 	}
 	else if (argc == 2 && ft_strncmp(f_name, BURNING_SHIP_STR, 10) == 0)
 		data->num = BURNING_SHIP;
@@ -47,13 +44,14 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 
 void	init_data(t_f_data *data)
 {
-	init_pallete(data);;
+	init_pallete(data);
 	data->added_x = 0;
 	data->added_y = 0;
 	data->quality = QUALITY;
 	data->scale_x = 4.0 / WIDTH;
 	data->scale_y = 4.0 / HEIGHT;
 	data->zoom = 1.0;
+	data->is_printed = 1;
 	data->fill_color = COLOR_WHITE;
 	data->mlx_ptr = mlx_init();
 	if (data->mlx_ptr == NULL)
