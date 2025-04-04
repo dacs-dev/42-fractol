@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fractal.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dcid-san <dcid-san@student.42madrid.com>   #+#  +:+       +#+        */
+/*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-03 16:38:29 by dcid-san          #+#    #+#             */
-/*   Updated: 2025-04-03 16:38:29 by dcid-san         ###   ########z;        */
+/*   Created: 2025/04/03 16:38:29 by dcid-san          #+#    #+#             */
+/*   Updated: 2025/04/04 05:50:48 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,35 @@ t_coord	burningship_iterate(t_coord z, t_coord c)
 
 // Función genérica que computa la cantidad de iteraciones para un punto dado.
 // La función 'iterate' se encarga de aplicar la fórmula propia del fractal.
-int	compute_iterations(t_coord z, t_coord c, t_f_data *data,
+double	compute_iterations(t_coord variable, t_coord constant, t_f_data *data,
 						t_coord (*iterate)(t_coord, t_coord))
 {
 	int	i;
+	t_coord zn;
+	double smooth_iter;
+	double mod;
 
+	zn = variable;
 	i = 0;
-	while (i < data->quality)
+	while ((zn.real * zn.real + zn.imaginary * zn.imaginary) < 4.0
+		&& i < data->quality)
 	{
-		z = iterate(z, c);
-		if ((z.real * z.real + z.imaginary * z.imaginary) > 4)
-			break ;
+		if (i == data->quality - 1)
+			return (data->quality);
+		zn = iterate(zn, constant);
 		i++;
 	}
-	return (i);
+	mod = sqrt(zn.real * zn.real + zn.imaginary * zn.imaginary);
+	if (1.0f < log2(mod))
+		smooth_iter = (double)i + 1 - log2(log2(mod));
+	else
+		smooth_iter = (double)i + 1 -  log2(1.0f);
+	return (smooth_iter);
 }
 
 // Función principal que recorre cada píxel y dibuja el fractal seleccionado.
 //t_coord c; Parámetro constante para fractales (por ejemplo, para Julia)
-int	calculate_fractal(int x, int y, t_f_data *data)
+double	calculate_fractal(int x, int y, t_f_data *data)
 {
 	t_coord	coord;
 	t_coord	c;
@@ -86,23 +96,21 @@ void	print_fractal(t_f_data *data)
 {
 	int		x;
 	int		y;
-	int		iterations;
+	double		iterations;
 
-	x = 0;
-	while (x < WIDTH)
+	y = 0;
+	while (y < HEIGHT)
 	{
-		y = 0;
-		while (y < HEIGHT)
+		x = 0;
+		while (x < WIDTH)
 		{
 			iterations = calculate_fractal(x, y, data);
-			if (iterations == data->quality)
-				set_pixel_color(x, y, data->fill_color, data->img);
-			else
-				set_pixel_color(x, y, scale_color(iterations,
-						data->quality), data->img);
-			y++;
+			set_pixel_color(x, y,
+				smooth_color(iterations, data->quality, data->fill_color),
+				data->img);
+			x++;
 		}
-		x++;
+		y++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->window_ptr,
 		data->img->img, 0, 0);

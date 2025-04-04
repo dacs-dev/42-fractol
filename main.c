@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:10:29 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/02 16:30:59 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 05:39:08 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 
 void	init_data(t_f_data *data)
 {
-	data->hypotenuse_max = 4;
+	init_pallete(data);;
 	data->added_x = 0;
 	data->added_y = 0;
 	data->quality = QUALITY;
 	data->scale_x = 4.0 / WIDTH;
 	data->scale_y = 4.0 / HEIGHT;
 	data->zoom = 1.0;
-	data->fill_color = COLOR_BLACK;
+	data->fill_color = COLOR_WHITE;
 	data->mlx_ptr = mlx_init();
 	if (data->mlx_ptr == NULL)
 		exit_with_error("Malloc of mlx_ptr fail\n", 1, data, NULL);

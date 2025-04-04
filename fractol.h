@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:31:16 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/02 16:55:56 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 05:49:44 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_f_data
 	char	*name;
 	int		num;
 	t_img	*img;
-	double	hypotenuse_max;
+	int		pallete[8];
 	double	added_x;
 	double	added_y;
 	double	quality;
@@ -92,7 +92,10 @@ void	exit_with_error(char *msg, int code,
 void	exit_with_msg(char *msg, int code,
 			t_f_data *data, void (*callback)(t_f_data *));
 void	free_data(t_f_data *data);
-int		scale_color(int unscaled, int curr_max);
+void	init_pallete(t_f_data *data);
+
+int	scale_color_fill(double iterations, double quality, int fill_color);
+int smooth_color(double smooth_iter, double max_iter, int fill_color);
 t_coord	transform_coord(int x, int y, t_f_data *data);
 void	set_pixel_color(int x, int y, int color, t_img *img);
 

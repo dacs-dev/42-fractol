@@ -6,7 +6,7 @@
 /*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 00:52:39 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/02 16:09:59 by krusty           ###   ########.fr       */
+/*   Updated: 2025/04/04 05:52:42 by krusty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,17 @@ int	keyboard_handler(int keysym, t_f_data *data)
 	handle_arrows(keysym, data);
 	handle_quality(keysym, data);
 	handle_nums(keysym, data);
-	if (keysym == XK_a)
+	if (keysym == XK_7)
 	{
-		if (data->fill_color <= 16777215 - 65793)
-			data->fill_color += 65793;
-		else
-			data->fill_color = COLOR_WHITE;
+		// Asigna un nuevo color (por ejemplo, naranja)
+		data->fill_color = 0xFFA500;
 	}
-	else if (keysym == XK_q)
+	else if (keysym == XK_8)
 	{
-		if (data->fill_color >= 65793)
-			data->fill_color -= 65793;
-		else
-			data->fill_color = COLOR_BLACK;
+		// Asigna otro color (por ejemplo, cian)
+		data->fill_color = 0x00FFFF;
 	}
+
 	print_fractal(data);
 	return (0);
 }
