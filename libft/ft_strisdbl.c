@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strisdbl.c                                      :+:      :+:    :+:   */
+/*   ft_strisnum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: krusty <krusty@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dcid-san <dcid-san@student.42madrid.com>   #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/01 15:53:22 by dcid-san          #+#    #+#             */
-/*   Updated: 2025/04/04 17:35:15 by krusty           ###   ########.fr       */
+/*   Created: 2025-04-01 15:53:22 by dcid-san          #+#    #+#             */
+/*   Updated: 2025-04-01 15:53:22 by dcid-san         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,13 @@ int	ft_strisdbl(char *str)
 	if (*str == '-' || *str == '+')
 		str++;
 	dot = 0;
-	while (*str != '\0')
+	while (*str)
 	{
-		if (*str == ' ')
-			return (0);
-		if (*str == '-' || *str == '+')
-			return (0);
-		if (*str == '.' && dot == 1)
+		if ((!ft_isdigit(*str) && *str != '.')
+			|| (*str == '.' && dot == 1))
 			return (0);
 		if (*str == '.')
 			dot = 1;
-		else if (!ft_isdigit(*str))
-			return (0);
 		str++;
 	}
 	return (1);

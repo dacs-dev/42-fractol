@@ -37,14 +37,11 @@ void	handle_quality(int keysym, t_f_data *data)
 
 void	handle_nums(int keysym, t_f_data *data)
 {
-	
 	if (keysym == XK_1)
 		data->num = MANDELBROT;
 	else if (keysym == XK_2)
 		data->num = JULIA;
 	else if (keysym == XK_3)
-		data->num = BURNING_SHIP;
-	else if (keysym == XK_5)
 		data->num = BURNING_SHIP;
 	else if (keysym == XK_0)
 	{
@@ -64,14 +61,21 @@ int	keyboard_handler(int keysym, t_f_data *data)
 	handle_arrows(keysym, data);
 	handle_quality(keysym, data);
 	handle_nums(keysym, data);
-	if (keysym == XK_7)
+	if (keysym == XK_a)
 	{
-		data->fill_color = 0xFFA500;
+		if (data->fill_index >= 8)
+			data->fill_index = 0;
+		else
+			data->fill_index++;
 	}
-	else if (keysym == XK_8)
+	else if (keysym == XK_s)
 	{
-		data->fill_color = 0x00FFFF;
+		if (data->fill_index <= 0)
+			data->fill_index = 8;
+		else
+			data->fill_index--;
 	}
+	data->fill_color = data->pallete[data->fill_index];
 	print_fractal(data);
 	return (0);
 }
@@ -83,9 +87,9 @@ int	mouse_handler(int button, int x, int y, t_f_data *data)
 	double	old_zoom;
 
 	old_zoom = data->zoom;
-	if (button == Button5)
+	if (button == Button4)
 		data->zoom *= 1.1;
-	else if (button == Button4)
+	else if (button == Button5)
 		data->zoom *= 0.9;
 	else
 		return (0);

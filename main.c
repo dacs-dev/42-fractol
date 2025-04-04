@@ -21,12 +21,16 @@ int	close_handler(t_f_data *data)
 void	parse_args(int argc, char **argv, t_f_data *data)
 {
 	char	*f_name;
+	size_t	name_len;
 
-	printf("Is double1: %d Is double2: %d\n", ft_strisdbl(argv[2]), ft_strisdbl(argv[3]));
 	f_name = ft_strlower(argv[1]);
-	if (argc == 2 && ft_strncmp(f_name, MANDELBROT_STR, 10) == 0)
+	name_len = ft_strlen(f_name);
+	if (argc == 2 && ft_strncmp(f_name,
+			MANDELBROT_STR, ft_strlen(MANDELBROT_STR)) == 0
+		&& ft_strlen(MANDELBROT_STR) == name_len)
 		data->num = MANDELBROT;
 	else if (argc == 4 && ft_strncmp(f_name, JULIA_STR, 6) == 0
+		&& ft_strlen(JULIA_STR) == name_len
 		&& ft_strisdbl(argv[2]) && ft_strisdbl(argv[3]))
 	{
 		data->num = JULIA;
@@ -34,7 +38,8 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 		data->julia_c_imag = ft_atodbl(argv[3]);
 		return ;
 	}
-	else if (argc == 2 && ft_strncmp(f_name, BURNING_SHIP_STR, 10) == 0)
+	else if (argc == 2 && ft_strncmp(f_name, BURNING_SHIP_STR, 13) == 0
+		&& ft_strlen(BURNING_SHIP_STR) == name_len)
 		data->num = BURNING_SHIP;
 	else
 		exit_with_msg(HELP_MSG, 0, data, free_data);
@@ -42,17 +47,8 @@ void	parse_args(int argc, char **argv, t_f_data *data)
 	data->julia_c_imag = 0.27015;
 }
 
-void	init_data(t_f_data *data)
+void	init_pointers(t_f_data *data)
 {
-	init_pallete(data);
-	data->added_x = 0;
-	data->added_y = 0;
-	data->quality = QUALITY;
-	data->scale_x = 4.0 / WIDTH;
-	data->scale_y = 4.0 / HEIGHT;
-	data->zoom = 1.0;
-	data->is_printed = 1;
-	data->fill_color = COLOR_WHITE;
 	data->mlx_ptr = mlx_init();
 	if (data->mlx_ptr == NULL)
 		exit_with_error("Malloc of mlx_ptr fail\n", 1, data, NULL);
@@ -70,13 +66,31 @@ void	init_data(t_f_data *data)
 			&data->img->line_length, &data->img->endian);
 }
 
+void	init_data(t_f_data *data)
+{
+	data->added_x = 0;
+	data->added_y = 0;
+	data->quality = QUALITY;
+	data->scale_x = 4.0 / WIDTH;
+	data->scale_y = 4.0 / HEIGHT;
+	data->zoom = 1.0;
+	data->mlx_ptr = NULL;
+	data->img = NULL;
+	data->window_ptr = NULL;
+	data->fill_index = 4;
+	init_pallete(data);
+}
+
 int	main(int argc, char **argv)
 {
 	t_f_data	*data;
 
 	data = malloc(sizeof(t_f_data));
-	parse_args(argc, argv, data);
+	if (argc < 2)
+		exit_with_msg(HELP_MSG, 0, data, NULL);
 	init_data(data);
+	parse_args(argc, argv, data);
+	init_pointers(data);
 	mlx_key_hook(data->window_ptr, keyboard_handler, data);
 	mlx_hook(data->window_ptr, ButtonPress,
 		ButtonPressMask, mouse_handler, data);

@@ -13,8 +13,6 @@
 #include "fractol.h"
 #include <math.h>
 
-// Transforma las coordenadas de píxel a las coordenadas del plano complejo.
-// Función de iteración para Mandelbrot (se utiliza también para Julia).
 t_coord	mandelbrot_iterate(t_coord z, t_coord c)
 {
 	t_coord	result;
@@ -24,9 +22,6 @@ t_coord	mandelbrot_iterate(t_coord z, t_coord c)
 	return (result);
 }
 
-// Función de iteración para Burning Ship.
-// Se aplican los valores absolutos a las partes real
-// e imaginaria antes de cada iteración.
 t_coord	burningship_iterate(t_coord z, t_coord c)
 {
 	t_coord	result;
@@ -40,8 +35,6 @@ t_coord	burningship_iterate(t_coord z, t_coord c)
 	return (result);
 }
 
-// Función genérica que computa la cantidad de iteraciones para un punto dado.
-// La función 'iterate' se encarga de aplicar la fórmula propia del fractal.
 double	compute_iterations(t_coord variable, t_coord constant, t_f_data *data,
 						t_coord (*iterate)(t_coord, t_coord))
 {
@@ -64,12 +57,10 @@ double	compute_iterations(t_coord variable, t_coord constant, t_f_data *data,
 	if (1.0f < log2(mod))
 		smooth_iter = (double)i + 1 - log2(log2(mod));
 	else
-		smooth_iter = (double)i + 1 -  log2(1.0f);
+		smooth_iter = (double)i + 1 - log2(1.0f);
 	return (smooth_iter);
 }
 
-// Función principal que recorre cada píxel y dibuja el fractal seleccionado.
-//t_coord c; Parámetro constante para fractales (por ejemplo, para Julia)
 double	calculate_fractal(t_coord	coord, t_f_data *data )
 {
 	if (data->num == MANDELBROT)
@@ -105,11 +96,8 @@ void	print_fractal(t_f_data *data)
 			scaled.real = scale_num(x,
 					data->zoom, data->scale_x, data->added_x);
 			iterations = calculate_fractal(scaled, data);
-			/* set_pixel_color(x, y,
-				smooth_color(iterations, data->quality, data),
-				data->img); */
 			set_pixel_color(x, y,
-				scale_color_fill(iterations, data->quality, data->fill_color),
+				smooth_color(iterations, data->quality, data),
 				data->img);
 			x++;
 		}

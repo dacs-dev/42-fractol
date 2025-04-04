@@ -30,20 +30,14 @@
 # define COLOR_WHITE 0xFFFFFF
 # define COLOR_MAGENTA 0xFF00FF
 # define HELP_MSG "Uso:\n\t./fractol mandelbrot \
-\n\t./fractol julia [c_real c_imaginary]\
-\n\t ./fractol burning_ship\n\t"
-# define PI 3.14159265358979323846
-
+\n\t./fractol julia c_real c_imaginary -> ./fractol julia 0.5 -0.8\
+\n\t./fractol burning_ship\n"
 # define JULIA 0
 # define MANDELBROT 1
 # define BURNING_SHIP 2
 # define MANDELBROT_STR "mandelbrot"
 # define JULIA_STR "julia"
 # define BURNING_SHIP_STR "burning_ship"
-/*
-** Estructura para la imagen, contiene la referencia a la imagen,
-** su dirección en memoria y los parámetros de la imagen.
-*/
 
 typedef struct s_img
 {
@@ -53,6 +47,13 @@ typedef struct s_img
 	int		line_length;
 	int		endian;
 }	t_img;
+
+typedef struct s_color
+{
+	int	r;
+	int	g;
+	int	b;
+}	t_color;
 
 typedef struct s_coord
 {
@@ -66,13 +67,13 @@ typedef struct s_f_data
 	void	*window_ptr;
 	int		num;
 	t_img	*img;
-	int		pallete[8];
+	int		pallete[9];
 	double	added_x;
 	double	added_y;
 	double	quality;
 	double	zoom;
 	int		is_printed;
-	int		pallete_size;
+	int		fill_index;
 	int		fill_color;
 	double	scale_x;
 	double	scale_y;
@@ -93,8 +94,7 @@ void	exit_with_msg(char *msg, int code,
 			t_f_data *data, void (*callback)(t_f_data *));
 void	free_data(t_f_data *data);
 void	init_pallete(t_f_data *data);
-int	scale_color_fill(double iterations, double quality, int fill_color);
-int smooth_color(double smooth_iter, double max_iter, t_f_data *data);
+int		smooth_color(double smooth_iter, double max_iter, t_f_data *data);
 double	scale_num(int num, double zoom, double scale, double added);
 void	set_pixel_color(int x, int y, int color, t_img *img);
 
